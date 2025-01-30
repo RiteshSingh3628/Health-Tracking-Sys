@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const register = async(req,res)=>{
     try {
         const user = await userServices.createUser(req.body);
-        const token = jwtProvider.getToken(user);
+        const token = jwtProvider.genToken(user);
         return res.status(200).send({token,message:"register success"});
     } catch (error) {
         return res.status(500).send({error: error.message});

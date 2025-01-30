@@ -1,6 +1,26 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwtProvider = require('../config/jwt');
+
+
+function calculateAge(dob) {
+    const today = new Date();
+    const birthDate = new Date(dob);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    // Adjust the age if the birth date has not yet occurred this year
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    return age;
+}
+
+
+
+
 // creating user 
 const createUser = async(userData)=>{
 
@@ -15,15 +35,19 @@ const createUser = async(userData)=>{
 
         // Hashing password
         const hashedPassword = await bcrypt.hash(userData.password, 10);
+        // updating age from dob
+      
+        const age = calculateAge(userData.dob);
         // Creating new user
-        const user = new User({...userData, password: hashedPassword });
+        const user = new User({...userData, password: hashedPassword,age:age });
         await user.save();
         console.log("created new user",user);
         return user;
         
     }
     catch (error) {
-        console.error("error while creating user",error);
+        console.error("error while creating user");
+        throw new Error(error.message);
     }
 
 }
@@ -39,7 +63,8 @@ const findUserById = async(userId)=>{
         return user;
         
     } catch (error) {
-        console.error("error while finding userbyId",error);
+        console.error("error while finding userbyId");
+        throw new Error(error.message);
         
     }
     
@@ -59,6 +84,7 @@ const userProfile = async(token)=>{
          
     } catch (error) {
         console.error("error while finding userbyId",error);
+        throw new Error(error.message);
     }
 }
 

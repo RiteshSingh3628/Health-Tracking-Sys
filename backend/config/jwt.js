@@ -1,4 +1,5 @@
-const jwt = require("jwt");
+const jwt = require('jsonwebtoken');
+require('dotenv').config;
 
 
 const genToken = (user) => {
@@ -7,7 +8,7 @@ const genToken = (user) => {
     email: user.email,
   };
 
-  const secretKey = process.env.SECRET_KEY;
+  const secretKey = process.env.SECRET_KEY||"ioifdh348hdf";
 
   const options = {
     expiresIn: "1h", //token expiration time 1h

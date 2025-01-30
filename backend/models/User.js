@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
         unique:true,
         match:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         lowercase:true,
-        unique:true,
 
     },
     password:{
@@ -65,4 +64,4 @@ const userSchema = new mongoose.Schema({
 })
 
 const User = mongoose.model('users',userSchema);
-export default User;
+module.exports =  User;
